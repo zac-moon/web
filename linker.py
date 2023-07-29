@@ -1,4 +1,5 @@
 import sys
+import os
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTextBrowser, QLineEdit, QVBoxLayout, QWidget, QPushButton
 from PyQt5.QtCore import QUrl
 from PyQt5.QtWebEngineWidgets import QWebEngineView
@@ -35,14 +36,16 @@ def display_html(html_content):
                 # Use QWebEngineView to extract the web page title
                 web_view = QWebEngineView()
                 web_view.setHtml(source)
-                web_view.loadFinished.connect(lambda _: set_window_title(web_view))
+                web_view.loadFinished.connect(lambda _: set_window_title(web_view, directory_path))
         except FileNotFoundError:
             print("Error: 404 URL Not Found")
         except Exception as e:
             print(f"Error occurred: {e}")
 
-    def set_window_title(web_view):
+    def set_window_title(web_view, directory_path):
         title = web_view.page().title()
+        if not title:
+            title = os.path.basename(os.path.normpath(directory_path))  # Use the folder name as the title
         main_win.setWindowTitle(title)
 
     main_win.show()
