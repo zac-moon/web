@@ -21,7 +21,9 @@ def main():
             with open(folder_name + '/bot', 'r') as r:
                 botCur = r.read()
             
-            if any(word in botCur for word in split_query):
+            botSplit = botCur.split()
+            
+            if any(word in botSplit for word in split_query):
                 print(folder_name)
         except FileNotFoundError:
             a =''
