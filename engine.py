@@ -1,6 +1,6 @@
 import os
 
-query = input('Enter WEB Query : ')
+query = input('Enter WEB Query : ').lower()
 split_query = query.split()
 
 def get_folders_in_directory(path):
