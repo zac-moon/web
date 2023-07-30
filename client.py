@@ -35,7 +35,6 @@ def display_html(html_content):
             # Send the URL request to the server
             client_socket.sendall(directory_path.encode())
 
-            # Receive the HTML content from the server
             html_content = client_socket.recv(4096).decode()
 
             # Close the connection with the server
