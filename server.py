@@ -56,7 +56,7 @@ def read_html_content(url_request):
         return "<h1>404 Not Found</h1>"
     except Exception as e:
         print(f"Error occurred: {e}")
-        return "<h1>Internal Server Error</h1>"
+        return f"<h1>Internal Server Error</h1><br><h3>Error : {e}</h3>"
 
 
 if __name__ == "__main__":
