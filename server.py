@@ -14,20 +14,18 @@ def start_server():
 
     while True:
         try:
-            # Wait for a client to connect
             client_socket, client_address = server_socket.accept()
             print(f"Connection established with {client_address}")
 
-            # Receive the URL request from the client
             url_request = client_socket.recv(1024).decode().strip()
+            print(f'URL Requested : {url_request}')
 
-            # Process the URL request and read the HTML content from the file
             html_content = read_html_content(url_request)
+            print(f'Read source HTML from {url_request}')
 
-            # Send the HTML content to the client
             client_socket.sendall(html_content.encode())
+            print(f'Source sent to client {client_address}')
 
-            # Close the connection with the client
             client_socket.close()
         except KeyboardInterrupt:
             break
@@ -46,15 +44,13 @@ def read_html_content(url_request):
     elif split_path[1]=="errors":
         refsars = 'errors/'+split_path[0]+'.html'
     elif len(split_path) == 2:
-        print('Sraight Domain')
         refsars = url_request + "/index.html"
     elif len(split_path) == 3:
-        print("Subdomain")
         refsars = url_request[1]+'.'+url_request[2]+'/'+url_request[0]+'/index.html'
 
     try:
-        with open(refsars, "r") as file:
-            return file.read()
+        with open(refsars, "r") as sourcefile:
+            return sourcefile.read()
     except FileNotFoundError:
         print(f"Error: 404 URL Not Found: {url_request}")
         return "<h1>404 Not Found</h1>"
