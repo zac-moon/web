@@ -4,9 +4,8 @@ def start_server():
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-    # Bind the server to a specific address and port
-    host = ''  # Listen on all available interfaces
-    port = 12345  # Choose a suitable port number
+    host = ''  
+    port = 60951
     server_socket.bind((host, port))
 
     server_socket.listen(1)
@@ -39,11 +38,7 @@ def start_server():
 def read_html_content(url_request):
     split_path = []
     split_path +=url_request.split('.')
-    if len(split_path) == 1:
-        refsars = 'errors/'+split_path[0]+'.html'
-    elif split_path[1]=="errors":
-        refsars = 'errors/'+split_path[0]+'.html'
-    elif len(split_path) == 2:
+    if len(split_path) == 2:
         refsars = url_request + "/index.html"
     elif len(split_path) == 3:
         refsars = url_request[1]+'.'+url_request[2]+'/'+url_request[0]+'/index.html'

@@ -28,7 +28,7 @@ def display_html(html_content):
         try:
             # Connect to the server
             server_address = 'localhost'  
-            server_port = 12345  # Make sure this matches the server's port
+            server_port = 60951
             client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             client_socket.connect((server_address, server_port))
 
