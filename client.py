@@ -37,10 +37,8 @@ def display_html(html_content):
 
             html_content = client_socket.recv(4096).decode()
 
-            # Close the connection with the server
             client_socket.close()
 
-            # Display the received HTML content
             text_browser.setHtml(html_content)
 
             web_view = QWebEngineView()

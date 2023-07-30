@@ -53,7 +53,7 @@ def read_html_content(url_request):
             return sourcefile.read()
     except FileNotFoundError:
         print(f"Error: 404 URL Not Found: {url_request}")
-        return "<h1>404 Not Found</h1>"
+        return f"<h1>404 Not Found- {url_request}</h1>"
     except Exception as e:
         print(f"Error occurred: {e}")
         return f"<h1>Internal Server Error</h1><br><h3>Error : {e}</h3>"
