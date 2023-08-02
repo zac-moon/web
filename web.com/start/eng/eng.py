@@ -1,17 +1,12 @@
 import tkinter as tk
 from tkinter import ttk
 
-def main():
-    runprog['value'] = 0
+sitename = ""
+owndet = ""
 
-    if not sitename:
-        sitenameEntry.config(highlightthickness=2, highlightbackground='red')
-    else:
-        sitenameENtry.config(highlightthickness=0)
-    if not owndet:
-        owndetEntry.config(highlightthickness=2, highlightbackground='red')
-    else:
-        owndetEntry.config(highlightthickness=0)
+def main(sitename, owndet):
+    if sitename == "":
+        print('Empty Sitename Feild')
 
     for obj in home:
         obj.pack_forget()
@@ -23,7 +18,6 @@ def main():
 
     sitename = sitenameEntry.get()
     owndet = owndetEntry.get()
-
 
     progressUp(10)
 
@@ -39,7 +33,7 @@ sitenameEntry = tk.Entry(root)
 owndetLabel = tk.Label(root, text="\n\nEnter a name to be recognised as the owner OWNER DETAILS (e.g. a Person or Company. \nCan be Firstname Lastname with Company Inc. (Can help to provide company's main website if they have one.))")
 owndetEntry = tk.Entry(root)
 
-startButton = tk.Button(root, text="Start", command=main)
+startButton = tk.Button(root, text="Start", command=main(sitename,owndet))
 
 runprog = ttk.Progressbar(root, orient='horizontal', length=300, mode='determinate')
 
