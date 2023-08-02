@@ -4,6 +4,15 @@ from tkinter import ttk
 def main():
     runprog['value'] = 0
 
+    if not sitename:
+        sitenameEntry.config(highlightthickness=2, highlightbackground='red')
+    else:
+        sitenameENtry.config(highlightthickness=0)
+    if not owndet:
+        owndetEntry.config(highlightthickness=2, highlightbackground='red')
+    else:
+        owndetEntry.config(highlightthickness=0)
+
     for obj in home:
         obj.pack_forget()
     runprog.pack()
@@ -15,15 +24,6 @@ def main():
     sitename = sitenameEntry.get()
     owndet = owndetEntry.get()
 
-    # Check if either entry is empty
-    if not sitename:
-        sitenameEntry.config(highlightthickness=2, highlightbackground='red')
-    else:
-        sitenameEntry.config(highlightthickness=0)
-    if not owndet:
-        owndetEntry.config(highlightthickness=2, highlightbackground='red')
-    else:
-        owndetEntry.config(highlightthickness=0)
 
     progressUp(10)
 
