@@ -1,22 +1,49 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>web.com | building a web for tommorow</title>
+    <title>web.com | building a web for tomorrow</title>
     <style>
         body {
-            background-color:aquamarine;
-            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: aquamarine;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
         }
         #logoText {
-            color:black;
+            color: black;
             background-color: darkcyan;
+            padding: 10px;
+            text-align: right;
+        }
+        .topnav {
+            overflow: hidden;
+        }
+        .topnav a {
+            float: right;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+            cursor: pointer;
+        }
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .topnav a.active {
+            background-color: #4CAF50;
+            color: white;
         }
     </style>
 </head>
-<body>  
-    <div id ="logoText">
-        <h1 align="right"><b>WEB<br>.COM</b></h1>
+<body>
+    <div id="logoText">
+        <h1><b>WEB<br>.COM</b></h1>
+        <div class="topnav">
+            <a>Web</a>
+            <a>Help</a>
+            <a>Start</a>
+        </div>
     </div>
-    <h2 align="center">WELCOME TO WEB!</h2>
 </body>
 </html>
