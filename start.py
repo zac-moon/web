@@ -1,3 +1,5 @@
+import os
+
 print('\n\nWELCOME TO THE WEB.COM START PROGRAM\nBefore we begin, we\'ll need some details about your NEW site.')
 sitename = input('ENTER NAME FOR SITE (e.g. example.com) : ')
 owndet = input('Enter a name to be set as the \"Owner Details\" for your site : ')
@@ -25,23 +27,33 @@ subdy = input('DO you want subdomains? Y for yes and N for no: ')
 '''
 
 print('Setting Up Site...')
-if not os.path.exists(name):
-    os.makedirs(name)
+if not os.path.exists(sitename):
+    os.makedirs(sitename)
 else:
     print(f'Sorry , this domain is claimed by annother person. Check out the \'owndet\' afile in the directory for {name}')
-
-refname = os.path.join(name, "index.html")
+print('Created site folder, claimed domain.')
+refname = os.path.join(sitename, "index.html")
 create = open(refname, "w")  
 create.write(
 f'''
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{name}</title>
+    <title>{sitename}</title>
 </head>
 <body>
-    <h1 align="center">Welcome to {name}! This site was created with web.com's START program. Visit start.web.com for more details. This site is owned by {owner}. If you would like to use this domain, contact them. If this site hasn't been updated ever, contact web.com.</h1>
+    <h1>Welcome to {sitename}! This site was created with web.com's START program. Visit start.web.com for more details.Unfortunatelly, this site hasn't been edited yet, so watch this space! This site is owned by {owndet}. If you would like to use this domain, contact them. If this site hasn't been updated ever, contact web.com.</h1>
 </body>
 </html>
 ''')
 create.close()
+
+print('Created index.html')
+
+create2 = open(sitename+"/bot","x")
+create2.close()
+
+print('Created bot file')
+
+create3 = open(sitename+'/bot')
+create3.write('')
