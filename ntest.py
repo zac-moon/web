@@ -10,7 +10,7 @@ else:
     print(f'Sorry , this domain is claimed by annother person. Check out the \'owndet\' afile in the directory for {name}')
 
 refname = os.path.join(name, "index.html")
-create = open(refname, "w")  # Change "x" to "w" for write mode
+create = open(refname, "w")  
 create.write(
 f'''
 <!DOCTYPE html>
