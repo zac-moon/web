@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+import os
 
 def main():
     sitename = sitenameEntry.get()
@@ -20,12 +21,16 @@ def main():
 
     progressUp(10)
 
-    createFolder = open(sitename+'/index.html','x')
+    # Create the site directory if it doesn't exist
+    if not os.path.exists(sitename):
+        os.makedirs(sitename)
+
+    createFolder = open(os.path.join(sitename, 'index.html'), 'x')
     createFolder.close()
 
     progressUp(15)
 
-    writeIndex = open(sitename+'/index.html')
+    writeIndex = open(os.path.join(sitename, 'index.html'), 'w')
     writeIndex.write(
 f'''
 <!DOCTYPE html>
@@ -39,39 +44,73 @@ f'''
 </html>
 '''
     )
+    writeIndex.close()
 
     progressUp(30)
 
-    createBot = open(sitename+'/bot','x')
+    createBot = open(os.path.join(sitename, 'bot'), 'x')
     createBot.close()
+
+    a = 10000000
+    b = 0
+    while a > b:
+        b += 1
+        b -= 2
+        b += 2
+        b += (1 * 1 * 1)
+    progressUp(40)
 
     progressUp(50)
 
-    createSetup = open(sitename+'/setup',"x")
+    createSetup = open(os.path.join(sitename, 'setup'), 'x')
     createSetup.close()
 
     progressUp(60)
 
-    writeSetup = open(sitename+'/setup')
+    a = 10000000
+    b = 0
+    while a > b:
+        b += 1
+        b -= 2
+        b += 2
+        b += (1 * 1 * 1)
+
+    writeSetup = open(os.path.join(sitename, 'setup'), 'w')
     writeSetup.write('start by web.com START.WEB.COM')
     writeSetup.close()
 
     progressUp(80)
 
-    createOwndet = open(sitename+'/owndet','x')
+    a = 10000000
+    b = 0
+    while a > b:
+        b += 1
+        b -= 2
+        b += 2
+        b += (1 * 1 * 1)
+
+    createOwndet = open(os.path.join(sitename, 'owndet'), 'x')
     createOwndet.close()
 
-    writeOwndet = open(sitename+'/owndet')
+    writeOwndet = open(os.path.join(sitename, 'owndet'), 'w')
     writeOwndet.write(owndet)
     writeOwndet.close()
 
     progressUp(90)
 
     print('Cleaning Up')
+    a = 10000000
+    b = 0
+    while a > b:
+        b += 1
+        b -= 2
+        b += 2
+        b += (1 * 1 * 1)
 
     progressUp(100)
     
     runLabel.pack_forget()
+    doneText.pack()
 
 root = tk.Tk()
 root.title('start by web.com | Engine')
@@ -89,7 +128,7 @@ startButton = tk.Button(root, text="Start", command=main)
 
 runprog = ttk.Progressbar(root, orient='horizontal', length=300, mode='determinate')
 runLabel = tk.Label(root, text="Running Setup Methods for Site..")
-doneText = tk.Label(root, text="\nSuccessfully Created Site! You should be able to find it in the correct directory")
+doneText = tk.Label(root, text="\nSuccessfully Created Site! You should be able to find it in the correct directory.\n\nFor more details regarding site setup and more, visit help.start.web.com")
 home = [titleLabel, sitenameLabel, sitenameEntry, owndetLabel, owndetEntry, startButton]
 
 titleLabel.pack()

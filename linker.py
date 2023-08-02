@@ -48,6 +48,22 @@ def display_html(html_content):
             print('Sub Subdomain')
             refsars = split_path[2]+"."+split_path[3]+'/'+split_path[1]+"/"+split_path[0]+"/index.html"
 
+            '''
+            print('SPECIAL - Start Engine Function')
+            script_name = "eng.py"
+            script_path = os.path.join("web.com", "start", "eng", script_name)
+            
+            try:
+                subprocess.run(["python3", script_path], check=True)
+            except FileNotFoundError:
+                print(f"Error: Python interpreter not found. Make sure Python is installed.")
+            except subprocess.CalledProcessError as e:
+                print(f"Error: {e}")
+            except Exception as e:
+                print(f"Unexpected Error: {e}")
+            '''
+
+
 
         try:
             with open(refsars, "r") as file:
@@ -57,6 +73,21 @@ def display_html(html_content):
                 web_view = QWebEngineView()
                 web_view.setHtml(source)
                 web_view.loadFinished.connect(lambda _: set_window_title(web_view, directory_path))
+
+                if directory_path =="eng.start.web.com":
+                    print('SPECIAL - Start Engine Function')
+                    script_name = "eng.py"
+                    script_path = os.path.join("web.com", "start", "eng", script_name)
+                    
+                    try:
+                        subprocess.run(["python3", script_path], check=True)
+                    except FileNotFoundError:
+                        print(f"Error: Python interpreter not found. Make sure Python is installed.")
+                    except subprocess.CalledProcessError as e:
+                        print(f"Error: {e}")
+                    except Exception as e:
+                        print(f"Unexpected Error: {e}")
+
         except FileNotFoundError:
             print("Error: 404 URL Not Found")
             redirect('404.errors')
