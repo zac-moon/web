@@ -3,6 +3,7 @@ import os
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTextBrowser, QLineEdit, QVBoxLayout, QWidget, QPushButton
 from PyQt5.QtCore import QUrl
 from PyQt5.QtWebEngineWidgets import QWebEngineView
+import subprocess
 
 
 def display_html(html_content):
@@ -32,7 +33,9 @@ def display_html(html_content):
         split_path = []
         split_path += directory_path.split('.')
         if directory_path=="/start/":
-            return "Redirecting to eng.start.web.com window..."
+            print('start')
+        if directory_path =="eng.start.web.com":
+            refsars = "web.com/start/eng/index.html"
         if len(split_path) == 1:
             refsars = 'errors/'+split_path[0]+'.html'
         elif split_path[1]=="errors":
