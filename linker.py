@@ -34,9 +34,7 @@ def display_html(html_content):
         split_path += directory_path.split('.')
         if directory_path=="/start/":
             print('start')
-        if directory_path =="eng.start.web.com":
-            refsars = "web.com/start/eng/index.html"
-        if len(split_path) == 1:
+        elif len(split_path) == 1:
             refsars = 'errors/'+split_path[0]+'.html'
         elif split_path[1]=="errors":
             refsars = 'errors/'+split_path[0]+'.html'
@@ -46,6 +44,9 @@ def display_html(html_content):
         elif len(split_path) == 3:
             print("Subdomain")
             refsars = split_path[1]+'.'+split_path[2]+'/'+split_path[0]+'/index.html'
+        elif len(split_path) ==4:
+            print('Sub Subdomain')
+            refsars = split_path[2]+"."+split_path[3]+'/'+split_path[1]+"/"+split_path[0]+"/index.html"
 
 
         try:
