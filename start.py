@@ -38,7 +38,6 @@ while a > b:
     b += 2
     b += (1 * 1 * 1)
 
-print('Created site folder, claimed domain.')
 refname = os.path.join(sitename, "index.html")
 create = open(refname, "w")
 create.write(
@@ -74,24 +73,16 @@ create4.close()
 
 print('Created owndet file')
 
-a = 10000000
-b = 0
-while a > b:
-    b += 1
-    b -= 2
-    b += 2
-    b += (1 * 1 * 1)
-
 create5 = open(os.path.join(sitename, "owndet"), 'w')
 create5.write(owndet)
 create5.close()
 
 print('Written owndet')
 
-create6 = open(sitename+'/setup','x')
+create6 = open(os.path.join(sitename,'setup'),'x')
 create6.close()
 
-create7 = open(sitename+"/setup")
+create7 = open(os.path.join(sitename, "setup"), "w")
 create7.write('start by web.com START.WEB.COM')
 create7.close()
 
