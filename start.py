@@ -1,7 +1,14 @@
 import os
 
 print('\n\nWELCOME TO THE WEB.COM START PROGRAM\nBefore we begin, we\'ll need some details about your NEW site.')
-sitename = input('ENTER NAME FOR SITE (e.g. example.com): ')
+snfound = False
+while not snfound:
+    sitename = input('ENTER NAME FOR SITE (e.g. example.com): ')
+    if not os.path.exists(sitename):
+        os.makedirs(sitename)
+        snfound = True
+    else:
+        print(f'Sorry, this domain is claimed by another person. Check out the \'owndet\' file in the directory for {sitename}')
 owndet = input('Enter a name to be set as the \"Owner Details\" for your site: ')
 devm = False
 if owndet[:3].lower() == "dev":
@@ -31,11 +38,6 @@ while a > b:
     b += 2
     b += (1 * 1 * 1)
 
-if not os.path.exists(sitename):
-    os.makedirs(sitename)
-else:
-    print(f'Sorry, this domain is claimed by another person. Check out the \'owndet\' file in the directory for {sitename}')
-
 print('Created site folder, claimed domain.')
 refname = os.path.join(sitename, "index.html")
 create = open(refname, "w")
@@ -62,7 +64,7 @@ print('Created bot file')
 
 create3 = open(os.path.join(sitename, 'bot'), 'w')
 kw_str = ' '.join(kw)
-create3.write('startbyweb ' + kw_str)
+create3.write('startbyweb '+sitename +" "+ kw_str)
 create3.close()
 
 print('Written bot file')
@@ -85,6 +87,14 @@ create5.write(owndet)
 create5.close()
 
 print('Written owndet')
+
+create6 = open(sitename+'/setup','x')
+create6.close()
+
+create7 = open(sitename+"/setup")
+create7.write('start by web.com START.WEB.COM')
+create7.close()
+
 print('Cleaning up...')
 a = 10000000
 b = 0
