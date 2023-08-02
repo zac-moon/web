@@ -31,6 +31,8 @@ def display_html(html_content):
     def load_html(directory_path):
         split_path = []
         split_path += directory_path.split('.')
+        if directory_path=="/start/":
+            return "Redirecting to eng.start.web.com window..."
         if len(split_path) == 1:
             refsars = 'errors/'+split_path[0]+'.html'
         elif split_path[1]=="errors":
