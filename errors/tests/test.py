@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QLineEdit, QVBoxLayout, Q
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 import subprocess
 from bs4 import BeautifulSoup
+from PyQt5 import QtCore
 
 
 class HTMLViewer(QMainWindow):
@@ -13,7 +14,7 @@ class HTMLViewer(QMainWindow):
         self.initUI()
 
     def initUI(self):
-        self.setWindowTitle("Linker")
+        self.setWindowTitle("Linker")  # Set default window title
         self.setGeometry(100, 100, 800, 600)
 
         central_widget = QWidget(self)
@@ -37,25 +38,10 @@ class HTMLViewer(QMainWindow):
 
     def on_web_view_load_finished(self, ok):
         if ok:
-            # Inject JavaScript to handle link clicks
-            self.web_view.page().runJavaScript('''
-                const links = document.querySelectorAll('a');
-                links.forEach(link => {
-                    link.onclick = function(event) {
-                        event.preventDefault();  // Prevent default link behavior
-                        const url = this.getAttribute('href');
-                        window.pywebview.handleLinkClicked(url);
-                    };
-                });
+            self.web_view.page().runJavaScript("document.title", self.on_title_extracted)
 
-                // Handle window.location.href changes
-                window.history.replaceState = function (state) {
-                    window.pywebview.handleLocationChange(state.url);
-                };
-                window.onpopstate = function(event) {
-                    window.pywebview.handleLocationChange(document.location.href);
-                };
-            ''')
+    def on_title_extracted(self, title):
+        self.setWindowTitle(title)  # Set window title to the extracted title
 
     def load_html(self, directory_path):
         split_path = []
@@ -104,29 +90,8 @@ class HTMLViewer(QMainWindow):
     def redirect(self, to_load):
         self.load_html(to_load)
 
-    # Function to handle link clicks
-    def handle_link_clicked(self, url):
-        self.redirect(url)
-
-    # Function to handle window.location.href changes
-    def handle_location_change(self, url):
-        self.redirect(url)
-
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     viewer = HTMLViewer()
-
-    # Expose Python functions to JavaScript
-    viewer.web_view.page().runJavaScript('''
-        window.pywebview = {
-            handleLinkClicked: function(url) {
-                pywebview.handle_link_clicked(url);
-            },
-            handleLocationChange: function(url) {
-                pywebview.handle_location_change(url);
-            }
-        };
-    ''')
-
     sys.exit(app.exec_())

@@ -1,9 +1,10 @@
 import sys
 import os
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLineEdit, QVBoxLayout, QWidget, QPushButton
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLineEdit, QVBoxLayout, QWidget, QPushButton, QLabel
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 import subprocess
 from bs4 import BeautifulSoup
+from PyQt5 import QtCore
 
 
 class HTMLViewer(QMainWindow):
@@ -19,6 +20,11 @@ class HTMLViewer(QMainWindow):
         central_widget = QWidget(self)
         self.setCentralWidget(central_widget)
         layout = QVBoxLayout(central_widget)
+
+        self.title_label = QLabel("Title will be shown here", central_widget)
+        self.title_label.setAlignment(QtCore.Qt.AlignCenter)  # Align text to center
+        self.title_label.setStyleSheet("height=16 font-size: 16px; padding: 10px;")  # Reduce font size and add padding
+        layout.addWidget(self.title_label)
 
         self.directory_entry = QLineEdit(central_widget)
         self.directory_entry.setPlaceholderText("Enter Site URL : ")
@@ -37,7 +43,10 @@ class HTMLViewer(QMainWindow):
 
     def on_web_view_load_finished(self, ok):
         if ok:
-            pass  
+            self.web_view.page().runJavaScript("document.title", self.on_title_extracted)
+
+    def on_title_extracted(self, title):
+        self.title_label.setText(title)
 
     def load_html(self, directory_path):
         split_path = []
