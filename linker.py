@@ -41,7 +41,7 @@ class HTMLViewer(QMainWindow):
             self.web_view.page().runJavaScript("document.title", self.on_title_extracted)
 
     def on_title_extracted(self, title):
-        self.setWindowTitle(title)  # Set window title to the extracted title
+        self.setWindowTitle(title)  
 
     def load_html(self, directory_path):
         split_path = []
