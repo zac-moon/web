@@ -86,6 +86,39 @@ class HTMLViewer(QMainWindow):
     def redirect(self, to_load):
         self.load_html(to_load)
 
+    def render_html(self, html_content):
+        soup = BeautifulSoup(html_content, 'html.parser')
+        self.replace_buttons_with_widgets(soup)
+        self.replace_entries_with_widgets(soup)
+        rendered_html = str(soup)
+        self.web_view.setHtml(rendered_html)
+
+    def replace_buttons_with_widgets(self, soup):
+        buttons = soup.find_all('button')
+        for button in buttons:
+            button_text = button.get_text()
+            button_widget = QPushButton(button_text)
+            button_widget.clicked.connect(lambda _, btn=button: self.handle_button_click(btn))
+            button.insert_after(button_widget)
+            button.extract()
+
+    def replace_entries_with_widgets(self, soup):
+        entries = soup.find_all('entry')
+        for entry in entries:
+            entry_widget = QLineEdit()
+            entry_widget.returnPressed.connect(lambda _, ent=entry: self.handle_entry_submit(ent, entry_widget))
+            entry.insert_after(entry_widget)
+            entry.extract()
+
+    def handle_button_click(self, button_tag):
+        # Handle button click event here
+        print(f"Button '{button_tag.get_text()}' clicked!")
+
+    def handle_entry_submit(self, entry_tag, entry_widget):
+        # Handle entry submit event here
+        entered_text = entry_widget.text()
+        print(f"Entry '{entry_tag.get_text()}' submitted with text: {entered_text}")
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
