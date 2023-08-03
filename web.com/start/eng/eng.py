@@ -128,7 +128,7 @@ startButton = tk.Button(root, text="Start", command=main)
 
 runprog = ttk.Progressbar(root, orient='horizontal', length=300, mode='determinate')
 runLabel = tk.Label(root, text="Running Setup Methods for Site..")
-doneText = tk.Label(root, text="\nSuccessfully Created Site! You should be able to find it in the correct directory.\n\nFor more details regarding site setup and more, visit help.start.web.com")
+doneText = tk.Label(root, text=f"\nSuccessfully Created Site! You should be able to find it in the correct directory{sitename}.\n\nFor more details regarding site setup and more, visit dev.web.com. For other help, visit help.web.com.")
 home = [titleLabel, sitenameLabel, sitenameEntry, owndetLabel, owndetEntry, startButton]
 
 titleLabel.pack()
