@@ -1,8 +1,7 @@
 import sys
 import os
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLineEdit, QVBoxLayout, QWidget, QPushButton, QLabel
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLineEdit, QVBoxLayout, QWidget, QPushButton
 from PyQt5.QtWebEngineWidgets import QWebEngineView
-from PyQt5.QtCore import Qt
 import subprocess
 from bs4 import BeautifulSoup
 
@@ -21,11 +20,6 @@ class HTMLViewer(QMainWindow):
         self.setCentralWidget(central_widget)
         layout = QVBoxLayout(central_widget)
 
-        self.title_label = QLabel(central_widget)
-        self.title_label.setMaximumHeight(30)  # Set the maximum height to 30 (adjust as needed)
-        self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(self.title_label)
-
         self.directory_entry = QLineEdit(central_widget)
         self.directory_entry.setPlaceholderText("Enter Site URL : ")
         self.directory_entry.returnPressed.connect(lambda: self.load_html(self.directory_entry.text()))
@@ -43,7 +37,25 @@ class HTMLViewer(QMainWindow):
 
     def on_web_view_load_finished(self, ok):
         if ok:
-            pass
+            # Inject JavaScript to handle link clicks
+            self.web_view.page().runJavaScript('''
+                const links = document.querySelectorAll('a');
+                links.forEach(link => {
+                    link.onclick = function(event) {
+                        event.preventDefault();  // Prevent default link behavior
+                        const url = this.getAttribute('href');
+                        window.pywebview.handleLinkClicked(url);
+                    };
+                });
+
+                // Handle window.location.href changes
+                window.history.replaceState = function (state) {
+                    window.pywebview.handleLocationChange(state.url);
+                };
+                window.onpopstate = function(event) {
+                    window.pywebview.handleLocationChange(document.location.href);
+                };
+            ''')
 
     def load_html(self, directory_path):
         split_path = []
@@ -69,13 +81,6 @@ class HTMLViewer(QMainWindow):
                 source = file.read()
                 self.web_view.setHtml(source)
 
-                # Get the title from the loaded HTML using BeautifulSoup
-                soup = BeautifulSoup(source, 'html.parser')
-                title = soup.title.string.strip()
-
-                # Update the title label
-                self.title_label.setText(title)
-
                 if directory_path == "eng.start.web.com":
                     print('SPECIAL - Start Engine Function')
                     script_name = "eng.py"
@@ -99,8 +104,29 @@ class HTMLViewer(QMainWindow):
     def redirect(self, to_load):
         self.load_html(to_load)
 
+    # Function to handle link clicks
+    def handle_link_clicked(self, url):
+        self.redirect(url)
+
+    # Function to handle window.location.href changes
+    def handle_location_change(self, url):
+        self.redirect(url)
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     viewer = HTMLViewer()
+
+    # Expose Python functions to JavaScript
+    viewer.web_view.page().runJavaScript('''
+        window.pywebview = {
+            handleLinkClicked: function(url) {
+                pywebview.handle_link_clicked(url);
+            },
+            handleLocationChange: function(url) {
+                pywebview.handle_location_change(url);
+            }
+        };
+    ''')
+
     sys.exit(app.exec_())
