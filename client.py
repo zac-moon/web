@@ -26,18 +26,19 @@ def display_html(html_content):
 
     def load_html(directory_path):
         try:
-            # Connect to the server
             server_address = 'localhost'  
             server_port = 60951
             client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             client_socket.connect((server_address, server_port))
 
-            # Send the URL request to the server
             client_socket.sendall(directory_path.encode())
 
             html_content = client_socket.recv(4096).decode()
 
             client_socket.close()
+            if html_content[:1]=='py':
+                print('Run Python File')
+                python_content = html_content - html_content[:1]
 
             text_browser.setHtml(html_content)
 
