@@ -37,7 +37,7 @@ class HTMLViewer(QMainWindow):
 
     def on_web_view_load_finished(self, ok):
         if ok:
-            pass  # No need to do anything here for now
+            pass  
 
     def load_html(self, directory_path):
         split_path = []
