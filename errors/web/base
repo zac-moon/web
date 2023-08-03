@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>web.com | building a web for tomorrow</title>
+    <style>
+        body {
+            background-color: aquamarine;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+        }
+        #logoText {
+            color: black;
+            background-color: darkcyan;
+            padding: 10px;
+            text-align: right;
+        }
+        .topnav {
+            overflow: hidden;
+        }
+        .topnav a {
+            float: right;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+            cursor: pointer;
+        }
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        /* Dropdown menu styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+    <script>
+        // JavaScript to handle dropdown functionality
+        document.addEventListener("DOMContentLoaded", function () {
+            const enginesLink = document.getElementById("enginesLink");
+            const dropdownContent = document.getElementById("dropdownContent");
+
+            enginesLink.addEventListener("mouseover", function () {
+                dropdownContent.style.display = "block";
+            });
+
+            enginesLink.addEventListener("mouseout", function () {
+                dropdownContent.style.display = "none";
+            });
+
+            // Hide the dropdown when the mouse is moved out of the dropdown content area
+            dropdownContent.addEventListener("mouseout", function () {
+                dropdownContent.style.display = "none";
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="logoText">
+        <h1><b>WEB<br>.COM</b></h1>
+        <div class="topnav">
+            <a>Web</a>
+            <a>Help</a>
+            <div class="dropdown">
+                <a id="enginesLink">Engines</a>
+                <div class="dropdown-content" id="dropdownContent">
+                    <a href="#">Engine 1</a>
+                    <a href="#">Engine 2</a>
+                    <a href="#">Engine 3</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
