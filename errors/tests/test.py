@@ -1,7 +1,8 @@
 import sys
 import os
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLineEdit, QVBoxLayout, QWidget, QPushButton
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLineEdit, QVBoxLayout, QWidget, QPushButton, QLabel
 from PyQt5.QtWebEngineWidgets import QWebEngineView
+from PyQt5.QtCore import Qt
 import subprocess
 from bs4 import BeautifulSoup
 
@@ -20,6 +21,11 @@ class HTMLViewer(QMainWindow):
         self.setCentralWidget(central_widget)
         layout = QVBoxLayout(central_widget)
 
+        self.title_label = QLabel(central_widget)
+        self.title_label.setMaximumHeight(30)  # Set the maximum height to 30 (adjust as needed)
+        self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(self.title_label)
+
         self.directory_entry = QLineEdit(central_widget)
         self.directory_entry.setPlaceholderText("Enter Site URL : ")
         self.directory_entry.returnPressed.connect(lambda: self.load_html(self.directory_entry.text()))
@@ -37,7 +43,7 @@ class HTMLViewer(QMainWindow):
 
     def on_web_view_load_finished(self, ok):
         if ok:
-            pass  # No need to do anything here for now
+            pass
 
     def load_html(self, directory_path):
         split_path = []
@@ -63,6 +69,13 @@ class HTMLViewer(QMainWindow):
                 source = file.read()
                 self.web_view.setHtml(source)
 
+                # Get the title from the loaded HTML using BeautifulSoup
+                soup = BeautifulSoup(source, 'html.parser')
+                title = soup.title.string.strip()
+
+                # Update the title label
+                self.title_label.setText(title)
+
                 if directory_path == "eng.start.web.com":
                     print('SPECIAL - Start Engine Function')
                     script_name = "eng.py"
@@ -85,39 +98,6 @@ class HTMLViewer(QMainWindow):
 
     def redirect(self, to_load):
         self.load_html(to_load)
-
-    def render_html(self, html_content):
-        soup = BeautifulSoup(html_content, 'html.parser')
-        self.replace_buttons_with_widgets(soup)
-        self.replace_entries_with_widgets(soup)
-        rendered_html = str(soup)
-        self.web_view.setHtml(rendered_html)
-
-    def replace_buttons_with_widgets(self, soup):
-        buttons = soup.find_all('button')
-        for button in buttons:
-            button_text = button.get_text()
-            button_widget = QPushButton(button_text)
-            button_widget.clicked.connect(lambda _, btn=button: self.handle_button_click(btn))
-            button.insert_after(button_widget)
-            button.extract()
-
-    def replace_entries_with_widgets(self, soup):
-        entries = soup.find_all('entry')
-        for entry in entries:
-            entry_widget = QLineEdit()
-            entry_widget.returnPressed.connect(lambda _, ent=entry: self.handle_entry_submit(ent, entry_widget))
-            entry.insert_after(entry_widget)
-            entry.extract()
-
-    def handle_button_click(self, button_tag):
-        # Handle button click event here
-        print(f"Button '{button_tag.get_text()}' clicked!")
-
-    def handle_entry_submit(self, entry_tag, entry_widget):
-        # Handle entry submit event here
-        entered_text = entry_widget.text()
-        print(f"Entry '{entry_tag.get_text()}' submitted with text: {entered_text}")
 
 
 if __name__ == "__main__":
