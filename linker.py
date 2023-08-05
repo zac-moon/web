@@ -43,6 +43,10 @@ class HTMLViewer(QMainWindow):
     def on_title_extracted(self, title):
         self.setWindowTitle(title)  
 
+    def handle_link_clicked(self, url):
+        link_url = url.toString()
+        print("Link clicked:", link_url)
+
     def load_html(self, directory_path):
         split_path = []
         split_path += directory_path.split('.')
