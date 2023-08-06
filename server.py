@@ -20,6 +20,7 @@ def start_server():
         print('')
 
     def read_html_content(url_request):
+        url_request = url_request.lower()
         split_path = []
         split_path += url_request.split('.')
         if url_request == "/start/":

@@ -3,29 +3,49 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QTextBrowser, QLineEdit, 
 from PyQt5.QtCore import QUrl
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 import socket
+import os
 
-def display_html(html_content):
-    app = QApplication(sys.argv)
-    main_win = QMainWindow()
-    main_win.setWindowTitle("Linker")
-    main_win.setGeometry(100, 100, 800, 600)
+class WebPageMonitor(QMainWindow):
+    def __init__(self):
+        super().__init__()
 
-    central_widget = QWidget(main_win)
-    main_win.setCentralWidget(central_widget)
-    directory_entry = QLineEdit(central_widget)
-    directory_entry.setPlaceholderText("Enter Site URL : ")
-    directory_entry.returnPressed.connect(lambda: load_html(directory_entry.text()))
-    load_button = QPushButton("Load Site", central_widget)
-    load_button.clicked.connect(lambda: load_html(directory_entry.text()))
-    text_browser = QTextBrowser(central_widget)
-    layout = QVBoxLayout()
-    layout.addWidget(directory_entry)
-    layout.addWidget(load_button)
-    layout.addWidget(text_browser)
-    central_widget.setLayout(layout)
+        self.setWindowTitle("Linker")
+        self.setGeometry(100, 100, 800, 600)
 
-    def load_html(directory_path):
+        self.central_widget = QWidget(self)
+        self.setCentralWidget(self.central_widget)
+
+        self.directory_entry = QLineEdit(self.central_widget)
+        self.directory_entry.setPlaceholderText("Enter Site URL : ")
+        self.directory_entry.returnPressed.connect(self.load_html)
+
+        self.load_button = QPushButton("Load Site", self.central_widget)
+        self.load_button.clicked.connect(self.load_html)
+
+        self.text_browser = QTextBrowser(self.central_widget)
+
+        self.layout = QVBoxLayout()
+        self.layout.addWidget(self.directory_entry)
+        self.layout.addWidget(self.load_button)
+        self.layout.addWidget(self.text_browser)
+
+        self.central_widget.setLayout(self.layout)
+
+        self.web_view = QWebEngineView(self.central_widget)
+        self.layout.addWidget(self.web_view)
+
+        self.current_url = None
+        self.web_view.page().urlChanged.connect(self.page_url_changed)
+
+        self.web_view.loadFinished.connect(self.on_web_view_load_finished)
+
+
+        self.show()
+
+    def load_html(self):
         try:
+            directory_path = self.directory_entry.text()
+
             server_address = 'localhost'  
             server_port = 60951
             client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -36,27 +56,28 @@ def display_html(html_content):
             html_content = client_socket.recv(4096).decode()
 
             client_socket.close()
-            if html_content[:1]=='py':
-                print('Run Python File')
-                python_content = html_content - html_content[:1]
 
-            text_browser.setHtml(html_content)
+            self.text_browser.setHtml(html_content)
+            self.web_view.setHtml(html_content)
 
-            web_view = QWebEngineView()
-            web_view.setHtml(html_content)
-            web_view.loadFinished.connect(lambda _: set_window_title(web_view, directory_path))
         except Exception as e:
             print(f"Error occurred: {e}")
 
-    def set_window_title(web_view, directory_path):
-        title = web_view.page().title()
-        if not title:
-            title = os.path.basename(os.path.normpath(directory_path))
-        main_win.setWindowTitle(title)
-    
-    main_win.show()
-    sys.exit(app.exec_())
+    def on_title_extracted(self, title):
+        self.setWindowTitle(title)  
+
+    def on_web_view_load_finished(self):
+        self.web_view.page().runJavaScript("document.title", self.on_title_extracted)
+
+    def page_url_changed(self, url):
+        if url != self.current_url:
+            self.current_url = url
+            print("New page loaded:", url.toString())
+            self.on_web_view_load_finished()  # Removed unnecessary argument
+
 
 
 if __name__ == "__main__":
-    display_html("")
+    app = QApplication(sys.argv)
+    window = WebPageMonitor()
+    sys.exit(app.exec_())
