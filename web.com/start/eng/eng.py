@@ -5,10 +5,27 @@ import os
 def main():
     sitename = sitenameEntry.get()
     owndet = owndetEntry.get()
+    snendList = sitename.split('.')
+
+    if len(snendList) < 2:
+        print('Invalid Sitename Format')
+        return
+
+    snend = snendList[-1]  
+
+    accList = ['com', 'net', 'co']
 
     if sitename == "" or owndet == "":
         print('Empty Sitename Field')
+
+    if snend not in accList:
+        print('Inappropriate domain ending, unable to create')
         return
+
+    if len(snendList) < 2:
+        print('Inappropriate domain format, requires domain.end')
+        return
+
 
     for obj in home:
         obj.pack_forget()
@@ -21,9 +38,9 @@ def main():
 
     progressUp(10)
 
-    # Create the site directory if it doesn't exist
     if not os.path.exists(sitename):
         os.makedirs(sitename)
+        
 
     createFolder = open(os.path.join(sitename, 'index.html'), 'x')
     createFolder.close()
@@ -111,6 +128,10 @@ f'''
     
     runLabel.pack_forget()
     doneText.pack()
+    doneBtn.pack()
+
+def quit():
+    root.destroy()
 
 root = tk.Tk()
 root.title('start by web.com | Engine')
@@ -129,6 +150,7 @@ startButton = tk.Button(root, text="Start", command=main)
 runprog = ttk.Progressbar(root, orient='horizontal', length=300, mode='determinate')
 runLabel = tk.Label(root, text="Running Setup Methods for Site..")
 doneText = tk.Label(root, text=f"\nSuccessfully Created Site! You should be able to find it in the correct directory.\n\nFor more details regarding site setup and more, visit dev.web.com. For other help, visit help.web.com.")
+doneBtn = tk.Button(root,text="Finish and Close", command=quit)
 home = [titleLabel, sitenameLabel, sitenameEntry, owndetLabel, owndetEntry, startButton]
 
 titleLabel.pack()
@@ -137,4 +159,5 @@ sitenameEntry.pack()
 owndetLabel.pack()
 owndetEntry.pack()
 startButton.pack()
+
 root.mainloop()
