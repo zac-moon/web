@@ -56,9 +56,40 @@ class WebPageMonitor(QMainWindow):
             html_content = client_socket.recv(4096).decode()
 
             client_socket.close()
+            if html_content[:2]=="#py":
+                print('Python Script')
+                pyscript =  html_content
+                try :
+                    scriptC = open('pyscriptcache.py','x')
+                    scriptC.close()
 
-            self.text_browser.setHtml(html_content)
-            self.web_view.setHtml(html_content)
+                    scriptE = open('pyscriptcache.py')
+                    scriptE.write('')
+                    scriptE.close()
+
+                    scriptW = open('pyscriptcache.py')
+                    scriptW.write(pyscript)
+                    scriptW.close()
+                except FileExistsError:
+                    scriptE = open('pyscriptcache.py')
+                    scriptE.write('')
+                    scriptE.close()
+
+                    scriptW = open('pyscriptcache.py')
+                    scriptW.write(pyscript)
+                    scriptW.close()
+
+                pyscriptpath = ('pyscriptcachepy')
+                subprocess.run(["python3",pyscriptpath], check=True)
+
+                clearCache = open('pyscriptcache.py')
+                clearCache.write('')
+                clearCache.close()
+
+
+            else: 
+                self.text_browser.setHtml(html_content)
+                self.web_view.setHtml(html_content)
 
         except Exception as e:
             print(f"Error occurred: {e}")

@@ -23,6 +23,11 @@ def start_server():
         url_request = url_request.lower()
         split_path = []
         split_path += url_request.split('.')
+        if url_request == 'eng.start.web.com':
+            print('Start Engine')
+            pyscript = open('web.com/start/eng/index.html')
+            return "#py\n"+pyscript.read()
+            
         if url_request == "/start/":
             print('start')
         elif len(split_path) == 1:
