@@ -1,11 +1,9 @@
 import sys
 import os
+import subprocess
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLineEdit, QVBoxLayout, QWidget, QPushButton
 from PyQt5.QtWebEngineWidgets import QWebEngineView
-import subprocess
-from bs4 import BeautifulSoup
-from PyQt5 import QtCore
-
+from PyQt5.QtCore import QUrl
 
 class HTMLViewer(QMainWindow):
     def __init__(self):
@@ -14,7 +12,7 @@ class HTMLViewer(QMainWindow):
         self.initUI()
 
     def initUI(self):
-        self.setWindowTitle("Linker")  
+        self.setWindowTitle("Linker")
         self.setGeometry(100, 100, 800, 600)
 
         central_widget = QWidget(self)
@@ -33,19 +31,27 @@ class HTMLViewer(QMainWindow):
         self.web_view = QWebEngineView(central_widget)
         layout.addWidget(self.web_view)
         self.web_view.loadFinished.connect(self.on_web_view_load_finished)
+        self.web_view.page().createWindow = self.on_link_clicked
 
         self.show()
 
     def on_web_view_load_finished(self, ok):
         if ok:
             self.web_view.page().runJavaScript("document.title", self.on_title_extracted)
+            self.web_view.page().runJavaScript("Array.from(document.getElementsByTagName('a')).map(a => a.href)", self.on_links_extracted)
 
     def on_title_extracted(self, title):
-        self.setWindowTitle(title)  
+        self.setWindowTitle(title)
 
-    def handle_link_clicked(self, url):
-        link_url = url.toString()
-        print("Link clicked:", link_url)
+    def on_links_extracted(self, links):
+        print("Extracted Links:")
+        for link in links:
+            print(link)
+
+    def on_link_clicked(self, url_type):
+        link_url = url_type.toString()
+        self.redirect(link_url)
+        return self.web_view.page()
 
     def load_html(self, directory_path):
         split_path = []
@@ -65,17 +71,14 @@ class HTMLViewer(QMainWindow):
         elif len(split_path) == 4:
             print('Sub Subdomain')
             refsars = split_path[2] + "." + split_path[3] + '/' + split_path[1] + "/" + split_path[0] + "/index.html"
-
         try:
             with open(refsars, "r") as file:
                 source = file.read()
                 self.web_view.setHtml(source)
-
                 if directory_path == "eng.start.web.com":
                     print('SPECIAL - Start Engine Function')
                     script_name = "eng.py"
                     script_path = os.path.join("web.com", "start", "eng", script_name)
-
                     try:
                         subprocess.run(["python3", script_path], check=True)
                     except FileNotFoundError:
@@ -84,7 +87,6 @@ class HTMLViewer(QMainWindow):
                         print(f"Error: {e}")
                     except Exception as e:
                         print(f"Unexpected Error: {e}")
-
         except FileNotFoundError:
             print("Error: 404 URL Not Found")
             self.redirect('404.errors')
@@ -92,8 +94,7 @@ class HTMLViewer(QMainWindow):
             print(f"Error occurred: {e}")
 
     def redirect(self, to_load):
-        self.load_html(to_load)
-
+        self.web_view.load(QUrl(to_load))
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
