@@ -48,6 +48,7 @@ class HTMLViewer(QMainWindow):
         print("Link clicked:", link_url)
 
     def load_html(self, directory_path):
+        directory_path = directory_path.lower()
         split_path = []
         split_path += directory_path.split('.')
         if directory_path == "/start/":
