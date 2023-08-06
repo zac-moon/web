@@ -13,7 +13,8 @@ def main():
 
     snend = snendList[-1]  
 
-    accList = ['com', 'net', 'co']
+    with open('errors/rules/domain_endings') as accListF:
+        accList = accListF.read()
 
     if sitename == "" or owndet == "":
         print('Empty Sitename Field')
