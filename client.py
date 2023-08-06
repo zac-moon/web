@@ -3,13 +3,14 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QTextBrowser, QLineEdit, 
 from PyQt5.QtCore import QUrl
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 import socket
+import subprocess
 import os
 
 class WebPageMonitor(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Linker")
+        self.setWindowTitle("Linker by web.com")
         self.setGeometry(100, 100, 800, 600)
 
         self.central_widget = QWidget(self)
@@ -56,30 +57,25 @@ class WebPageMonitor(QMainWindow):
             html_content = client_socket.recv(4096).decode()
 
             client_socket.close()
-            if html_content[:2]=="#py":
+            if html_content[0]+html_content[1]+html_content[2]=="#py":
                 print('Python Script')
                 pyscript =  html_content
-                try :
-                    scriptC = open('pyscriptcache.py','x')
-                    scriptC.close()
+                try:
+                    with open('pyscriptcache.py', 'x') as scriptC:
+                        pass  
 
-                    scriptE = open('pyscriptcache.py')
-                    scriptE.write('')
-                    scriptE.close()
+                    with open('pyscriptcache.py', 'w') as scriptW:
+                        scriptW.write(pyscript)  
 
-                    scriptW = open('pyscriptcache.py')
-                    scriptW.write(pyscript)
-                    scriptW.close()
                 except FileExistsError:
-                    scriptE = open('pyscriptcache.py')
-                    scriptE.write('')
-                    scriptE.close()
+                    with open('pyscriptcache.py', 'w') as scriptE:
+                        pass 
 
-                    scriptW = open('pyscriptcache.py')
-                    scriptW.write(pyscript)
-                    scriptW.close()
+                    with open('pyscriptcache.py', 'w') as scriptW:
+                        scriptW.write(pyscript)  
 
-                pyscriptpath = ('pyscriptcachepy')
+
+                pyscriptpath = ('pyscriptcache.py')
                 subprocess.run(["python3",pyscriptpath], check=True)
 
                 clearCache = open('pyscriptcache.py')
@@ -104,7 +100,7 @@ class WebPageMonitor(QMainWindow):
         if url != self.current_url:
             self.current_url = url
             print("New page loaded:", url.toString())
-            self.on_web_view_load_finished()  # Removed unnecessary argument
+            self.on_web_view_load_finished()  
 
 
 

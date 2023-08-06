@@ -14,7 +14,7 @@ class HTMLViewer(QMainWindow):
         self.initUI()
 
     def initUI(self):
-        self.setWindowTitle("Linker")  
+        self.setWindowTitle("Linker by web.com")  
         self.setGeometry(100, 100, 800, 600)
 
         central_widget = QWidget(self)
